@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Customer</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/customer.css' %}">
+    </head>
+
+    <body ng-app="refearn" ng-controller="refearnController">
+
+        <h1>Customer List Abc</h1>
+
+        <form ng-submit="todoAdd()">
+            <input type="text" ng-model="todoInput" placeholder="Add a new to do...">
+            <button type="submit" ng-click="saveData()">Submit</button>
+        </form>
+        <br>
+
+        <div ng-repeat="todo in todoList">
+            <input type="checkbox" ng-model="todo.done"> <span ng-bind="todo.todoText"></span>
+        </div>
+        <p>
+            <button class="done" ng-click="remove()">Done</button>
+        </p>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+        <script src="{% static 'js/customer.js' %}"></script>
+    </body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Customer</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/customer.css' %}">
+    </head>
+
+    <body ng-app="refearn" ng-controller="refearnController">
+
+        <h1></h1>
+
+        <form ng-submit="addReferral()">
+            <input type="number" ng-model="referrer" placeholder="Refferer ID: ">
+            <input type="number" ng-model="customer" placeholder="Customer ID: ">
+            <button type="submit" ng-click="saveData()">Submit</button>
+        </form>
+        <br>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+        <script src="{% static 'js/customer.js' %}"></script>
+    </body>
+</html>
