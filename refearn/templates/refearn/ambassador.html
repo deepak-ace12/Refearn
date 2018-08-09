@@ -12,9 +12,10 @@
         <h1></h1>
 
         <form>
-            Customer ID<input type="number" ng-model="customer" placeholder="Customer ID: "><br>
-            Referrer ID<input type="number" ng-model="referrer" placeholder="Refferer ID: "><br>
-            <button type="submit" ng-click="addReferral()">Submit</button>
+            Email <input type="email" ng-model="email" placeholder="abc@example.com"><br>
+            Joining Date <input type="date" ng-model="joining_date" placeholder="dd/mm/yyyy"><br>
+            Referral Id: <input type="number" ng-model="referral_id" placeholder="Referring Customer ID">
+            <button type="submit" ng-click="addAmbassodor()">Submit</button>
         </form>
         <br>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>

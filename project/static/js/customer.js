@@ -13,9 +13,18 @@ app.controller('refearnController', function($scope, $http){
     //         $scope.todoList.push(todo);
     //     }
     // });
-    $scope.saveData = function(){
-        var data = {referrer: $scope.referrer, customer: $scope.customer}
+    $scope.addReferral = function(){
         $http.put('/api/customer/'+$scope.customer+'/?referrer='+$scope.referrer)
+    }
+
+    $scope.addAmbassodor = function(){
+        var doj = new Date($scope.joining_date)
+        // var month = format(todayTime .getMonth() + 1);
+        // var day = format(todayTime .getDate());
+        // var year = format(todayTime .getFullYear());
+        doc = doj.getFullYear()+"-"+(doj.getMonth()+1)+"-"+doj.getDate()
+        var data = {email: $scope.email, joining_date:doc, referral_id:$scope.referral_id, is_ambassador:true}
+        $http.post('/api/customer/', data)
     }
 
     $scope.getAllCustomers = function(){

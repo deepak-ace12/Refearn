@@ -16,6 +16,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     search_fields = ('customer_id',)
 
     def create(self, request):
+        print request.data
         try:
             req_data = request.data
             serializer = self.serializer_class(
@@ -56,11 +57,9 @@ class CustomerViewSet(viewsets.ModelViewSet):
                 raise Exception(serializer.errors)
             return Response(serializer.data)
         except Exception, e:
-            print str(e.message)
-            print "here3"
             return Response({'status': 'error', 'response': str(e.message)}, status=status.HTTP_400_BAD_REQUEST)
         
-        
+
 class CustomerChildrenView(generics.ListAPIView):
 
     def list(self, request, customer_id):
@@ -86,10 +85,3 @@ class CustomerReferralView(viewsets.ModelViewSet):
             return Response(serializer.data)
         except Exception, e:
             return Response({"status": "error", "response": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class AddReferralView(APIView):
-
-#     def put(self, request):
-#         print "here"
-#         return TemplateResponse(request, 'refearn/refferal.html', {})
