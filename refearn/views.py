@@ -26,9 +26,16 @@ class CustomerViewSet(viewsets.ModelViewSet):
                 if instance.referral_id:
                     instance.referral_id.payback += 30
                     instance.referral_id.save()
+                    if instance.referral_id.referral_id:
+                        root = instance.referral_id.referral_id
+                        while(root is not None):
+                            if root.is_ambassador:
+                                root.payback += 10
+                                root.save()
+                            root = root.referral_id
             else:
                 raise Exception(serializer.errors)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception, e:
             return Response({'status': 'error', 'response': str(e.message)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -47,15 +54,21 @@ class CustomerViewSet(viewsets.ModelViewSet):
                 instance = serializer.instance
                 if instance.referral_id and instance.referral_id.customer_id is not old_data.get('referral_id'):
                     if old_data.get('referral_id'):
-                        old_refferal = Customer.objects.get(
-                            customer_id=old_data.get('referral_id'))
+                        old_refferal = Customer.objects.get(customer_id=old_data.get('referral_id'))
                         old_refferal.payback -= 30
                         old_refferal.save()
                     instance.referral_id.payback += 30
                     instance.referral_id.save()
+                    if instance.referral_id.referral_id:
+                        root = instance.referral_id.referral_id
+                        while(root is not None):
+                            if root.is_ambassador:
+                                root.payback += 10
+                                root.save()
+                            root = root.referral_id
             else:
                 raise Exception(serializer.errors)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception, e:
             return Response({'status': 'error', 'response': str(e.message)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -103,10 +116,8 @@ class AmbassadorView(APIView):
             while(True):
                 children = Customer.objects.filter(referral_id__in=root)
                 if (len(children) > 0):
-                    level_order_children[i] = [
-                        child.customer_id for child in children]
-                    root = Customer.objects.filter(
-                        customer_id__in=level_order_children[i])
+                    level_order_children[i] = [child.customer_id for child in children]
+                    root = Customer.objects.filter(customer_id__in=level_order_children[i])
                     i = i+1
                 else:
                     break

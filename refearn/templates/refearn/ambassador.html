@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Customer</title>
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/customer.css' %}">
-    </head>
+{% extends 'base.html' %}
+{% block head %}
+  <title>Ambassador</title>
+{% endblock %} 
+{% block body %}
 
-    <body ng-app="refearn" ng-controller="refearnController">
+<div ng-app="refearn" ng-controller="refearnController">
 
-        <h1></h1>
-
-        <form>
-            Email <input type="email" ng-model="email" placeholder="abc@example.com"><br>
-            Joining Date <input type="date" ng-model="joining_date" placeholder="dd/mm/yyyy"><br>
-            Referral Id: <input type="number" ng-model="referral_id" placeholder="Referring Customer ID">
-            <button type="submit" ng-click="addAmbassodor()">Submit</button>
-        </form>
-        <br>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
-        <script src="{% static 'js/customer.js' %}"></script>
-    </body>
-</html>
+  <form>
+    <div class="col-md-4">
+      <label>Email</label>
+      <input type="email" class="form-control" ng-model="email" placeholder="abc@example.com">
+      <br> Joining Date
+      <input type="date" class="form-control" ng-model="joining_date" placeholder="dd/mm/yyyy">
+      <br> Referral Id:
+      <input type="number" class="form-control" ng-model="referral_id" placeholder="Referring Customer ID">
+      <br>
+      <button type="submit" class="btn btn-info btn-sm" ng-click="addAmbassodor()">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

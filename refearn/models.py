@@ -5,7 +5,7 @@ from django.db import models
 
 class Customer(models.Model):
     customer_id = models.AutoField(primary_key=True)
-    email = models.CharField(max_length=40)
+    email = models.EmailField(max_length=40, unique=True)
     referral_id = models.ForeignKey('self',null=True, blank=True)
     payback = models.FloatField(default=0)
     is_ambassador = models.BooleanField(default=False)

@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Customer</title>
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/customer.css' %}">
-    </head>
+{% extends 'base.html' %}
+{% block head %}
+  <title>Referral</title>
+{% endblock %} 
+{% block body %}
 
-    <body ng-app="refearn" ng-controller="refearnController">
-
-        <h1></h1>
-
-        <form>
-            Customer ID<input type="number" ng-model="customer" placeholder="Customer ID: "><br>
-            Referrer ID<input type="number" ng-model="referrer" placeholder="Refferer ID: "><br>
-            <button type="submit" ng-click="addReferral()">Submit</button>
-        </form>
-        <br>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
-        <script src="{% static 'js/customer.js' %}"></script>
-    </body>
-</html>
+<div ng-app="refearn" ng-controller="refearnController">
+  <form>
+    <div class="col-md-4">
+      <label>Customer ID</label>
+      <input type="number" class="form-control" ng-model="customer" placeholder="Enter Customer ID: ">
+      <br> <label>Referral ID</label>
+      <input type="number" class="form-control" ng-model="referrer" placeholder="Enter the refferer ID: ">
+      <br>
+      <button type="submit" class="btn btn-info btn-sm" ng-click="addReferral()">Submit</button>
+    </div>
+  </form>
+  <br>
+  {{response}}
+</div>
+{% endblock %}
