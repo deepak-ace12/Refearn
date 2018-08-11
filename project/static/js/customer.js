@@ -2,6 +2,14 @@ var app = angular.module('refearn', []);
 app.controller('refearnController', function($scope, $http){
     $scope.addReferral = function(){
         $http.put('/api/customer/'+$scope.customer+'/?referrer='+$scope.referrer)
+        .then(
+            function(response){
+                window.location.replace("https://www.facebook.com");
+            }, 
+            function(response){
+              // failure callback
+            }
+         );
         
     }
     $scope.addAmbassodor = function(){
