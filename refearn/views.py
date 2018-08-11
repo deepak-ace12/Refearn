@@ -16,7 +16,6 @@ class CustomerViewSet(viewsets.ModelViewSet):
     search_fields = ('customer_id',)
 
     def create(self, request):
-        print request.data
         try:
             req_data = request.data
             serializer = self.serializer_class(
@@ -32,7 +31,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         except Exception, e:
             return Response({'status': 'error', 'response': str(e.message)}, status=status.HTTP_400_BAD_REQUEST)
-        
+
     def update(self, request, customer_id):
         referrer = request.query_params.get('referrer')
         try:
@@ -45,10 +44,11 @@ class CustomerViewSet(viewsets.ModelViewSet):
                 customer, data=req_data, partial=True, context={'request': request})
             if serializer.is_valid():
                 serializer.save()
-                instance = serializer.instance                    
+                instance = serializer.instance
                 if instance.referral_id and instance.referral_id.customer_id is not old_data.get('referral_id'):
                     if old_data.get('referral_id'):
-                        old_refferal = Customer.objects.get(customer_id=old_data.get('referral_id'))
+                        old_refferal = Customer.objects.get(
+                            customer_id=old_data.get('referral_id'))
                         old_refferal.payback -= 30
                         old_refferal.save()
                     instance.referral_id.payback += 30
@@ -58,7 +58,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         except Exception, e:
             return Response({'status': 'error', 'response': str(e.message)}, status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 class CustomerChildrenView(generics.ListAPIView):
 
@@ -78,10 +78,51 @@ class CustomerReferralView(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     ordering_fields = '__all__'
     ordering = ('-number_of_children',)
-    
+
     def list(self, request):
         try:
             serializer = self.serializer_class(self.queryset, many=True)
             return Response(serializer.data)
         except Exception, e:
             return Response({"status": "error", "response": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AmbassadorView(APIView):
+    queryset = Customer.objects.filter(is_ambassador=True)
+    lookup_field = 'customer_id'
+    serializer_class = CustomerSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('customer_id',)
+
+    def get(self, request, customer_id, level=0):
+        level_order_children = {}
+        children_list = []
+        try:
+            root = Customer.objects.filter(customer_id=customer_id)
+            i = 0
+            while(True):
+                children = Customer.objects.filter(referral_id__in=root)
+                if (len(children) > 0):
+                    level_order_children[i] = [
+                        child.customer_id for child in children]
+                    root = Customer.objects.filter(
+                        customer_id__in=level_order_children[i])
+                    i = i+1
+                else:
+                    break
+            if level:
+                if level_order_children.has_key(int(level)-1):
+                    children_list = list(
+                        set(level_order_children.get(int(level)-1)))
+                else:
+                    return Response("The Ambassador {0} doesn't have any child at level {1}".format(customer_id, level),
+                                    status=status.HTTP_404_NOT_FOUND)
+            else:
+                for level in level_order_children.values():
+                    children_list = children_list + level
+                children_list = list(set(children_list))
+            data = Customer.objects.filter(customer_id__in=children_list)
+            serializer = self.serializer_class(data, many=True)
+            return Response(serializer.data)
+        except Exception, e:
+            return Response(str(e), status=status.HTTP_404_NOT_FOUND)
