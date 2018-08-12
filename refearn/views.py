@@ -74,6 +74,11 @@ class CustomerViewSet(viewsets.ModelViewSet):
 
 
 class CustomerChildrenView(generics.ListAPIView):
+    queryset = Customer.objects.all()
+    lookup_field = 'customer_id'
+    serializer_class = CustomerSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('customer_id',)
 
     def list(self, request, customer_id):
         try:
