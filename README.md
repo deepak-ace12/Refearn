@@ -1,10 +1,11 @@
 ### Running The Project
+#### Go to the directory /Refearn
 
 1. Install the dependencies from requirement.txt
 ```
 pip install -r project/requirement.txt
 ```
-2. Go to the directory /project and run the following command
+2. run the following command
 ```
 python manage.py migrate
 python manage.py runserver
