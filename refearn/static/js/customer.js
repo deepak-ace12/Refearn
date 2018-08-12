@@ -1,11 +1,11 @@
 var app = angular.module('refearn', []);
 app.controller('refearnController', function($scope, $http){
     $scope.addReferral = function(){
-        $http.put('/api/customer/'+$scope.customer+'/?referrer='+$scope.referrer)
+        $http.get('/api/customer/'+$scope.customer+'/?referrer='+$scope.referrer)
         .then(function onSuccess(response) {
             window.location.href = 'http://localhost:8000/api/customer/'+$scope.customer;
         }).catch(function onError(response) {
-            alert("Error", response)
+            alert(response.data.detail)
         });
     }
     $scope.addAmbassodor = function(){
@@ -16,7 +16,7 @@ app.controller('refearnController', function($scope, $http){
         .then(function onSuccess(response) {
             window.location.href = 'http://localhost:8000/api/customer/';
         }).catch(function onError(response) {
-            alert("Error", response)
+            alert(response.data.status.toUpperCase()+" : "+response.data.response)
         });
     }
 })
