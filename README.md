@@ -31,7 +31,7 @@ where customer_id is an id of any customer.
 ```
 go to the link http://127.0.0.1:8000/api/add/refferal/
 
-add customer id and the id and referral id.
+add customer id and referral id.
 Referral Id is the id of the customer who is referring the new customer.
 ```
 
